@@ -9,7 +9,7 @@ resource "aws_s3_bucket" "bucket1" {
     Name        = "cher_gui_unique_bucket_12345"
 
     Environment = "dev"
-  }س
+  }
 }
 
 resource "aws_s3_bucket_versioning" "bucket1_versioning" {
