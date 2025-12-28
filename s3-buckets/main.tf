@@ -20,10 +20,10 @@ resource "aws_s3_bucket_versioning" "bucket1_versioning" {
 }
 
 resource "aws_s3_bucket" "bucket2" {
-  bucket = "arumullaaluruu1"
+  bucket = "cher_gui_unique_bucket_67890"
 
   tags = {
-    Name        = "arumullaaluruu1"
+    Name        = "cher_gui_unique_bucket_67890"
     Environment = "dev"
   }
 }
