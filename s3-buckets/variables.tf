@@ -1,7 +1,7 @@
 variable "bucket1_name" {
   description = "Name of the first S3 bucket"
   type        = string
-  default     = "aluruarumullaa1"
+  default     = "her-gui-unique-bucket-12345"
 }
 
 variable "bucket2_name" {
