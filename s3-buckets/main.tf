@@ -3,10 +3,10 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "bucket1" {
-  bucket = "aluruarumullaa1"
+  bucket = "aluruarumullaa12"
 
   tags = {
-    Name        = "aluruarumullaa1"
+    Name        = "aluruarumullaa12"
     Environment = "dev"
   }
 }
