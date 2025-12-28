@@ -7,7 +7,7 @@ variable "bucket1_name" {
 variable "bucket2_name" {
   description = "Name of the second S3 bucket"
   type        = string
-  default     = "arumullaaluruu1"
+  default     = "cher-gui-unique-bucket-67890"
 }
 
 variable "environment" {
