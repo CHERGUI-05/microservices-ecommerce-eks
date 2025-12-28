@@ -3,17 +3,11 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "bucket1" {
-<<<<<<< HEAD
-  bucket = "aluruarumullaa1-2025"
-
-  tags = {
-    Name        = "aluruarumullaa1-2025"
-=======
   bucket = "cherGUI-r1heb-bucket1-2025-12-28"
 
   tags = {
     Name        = "cherGUI-r1heb-bucket1-2025-12-28"
->>>>>>> 734ec73 (Fix S3 bucket names to be unique)
+
     Environment = "dev"
   }
 }
