@@ -3,13 +3,13 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "bucket1" {
-  bucket = "cherGUI-r1heb-bucket1-2025-12-28"
+  bucket = "cher_gui_unique_bucket_12345"
 
   tags = {
-    Name        = "cherGUI-r1heb-bucket1-2025-12-28"
+    Name        = "cher_gui_unique_bucket_12345"
 
     Environment = "dev"
-  }
+  }س
 }
 
 resource "aws_s3_bucket_versioning" "bucket1_versioning" {
