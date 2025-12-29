@@ -3,10 +3,10 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "bucket1" {
-  bucket = "cher-gui-unique-bucket-12345"
+  bucket = "cher-gui-unique-bucket-1234567"
 
   tags = {
-    Name        = "cher-gui-unique-bucket-12345"
+    Name        = "cher-gui-unique-bucket-1234567"
 
     Environment = "dev"
   }
@@ -20,10 +20,10 @@ resource "aws_s3_bucket_versioning" "bucket1_versioning" {
 }
 
 resource "aws_s3_bucket" "bucket2" {
-  bucket = "cher-gui-unique-bucket-67890"
+  bucket = "cher-gui-unique-bucket-6789067"
 
   tags = {
-    Name        = "cher-gui-unique-bucket-67890"
+    Name        = "cher-gui-unique-bucket-6789067"
     Environment = "dev"
   }
 }
