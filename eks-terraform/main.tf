@@ -1,32 +1,4 @@
 # ----------------------------
-# Backend محلي لتخزين الـ state
-# ----------------------------
-terraform {
-  backend "local" {
-    path = "terraform.tfstate"
-  }
-}
-
-# ----------------------------
-# Provider
-# ----------------------------
-provider "aws" {
-  region = "us-east-1"
-}
-
-# ----------------------------
-# IAM Roles (استخدم بيانات جاهزة بدل الإنشاء)
-# ----------------------------
-# إذا كان لديك أدوار جاهزة في الـ lab، استبدلي الأسماء هنا
-data "aws_iam_role" "cluster_role" {
-  name = "Existing-EKS-Cluster-Role"
-}
-
-data "aws_iam_role" "node_role" {
-  name = "Existing-EKS-Node-Role"
-}
-
-# ----------------------------
 # VPC and Subnet Data Sources
 # ----------------------------
 data "aws_vpc" "main" {
@@ -60,11 +32,11 @@ data "aws_security_group" "selected" {
 }
 
 # ----------------------------
-# EKS Cluster
+# EKS Cluster (باستخدام دور موجود مسبقًا)
 # ----------------------------
 resource "aws_eks_cluster" "eks" {
   name     = "project-eks"
-  role_arn = data.aws_iam_role.cluster_role.arn
+  role_arn = "arn:aws:iam::851725605085:role/ExistingMasterRole"  # استبدل بالـ ARN لدور Master الموجود
 
   vpc_config {
     subnet_ids         = [data.aws_subnet.subnet-1.id, data.aws_subnet.subnet-2.id]
@@ -79,16 +51,16 @@ resource "aws_eks_cluster" "eks" {
 }
 
 # ----------------------------
-# EKS Node Group
+# EKS Node Group (باستخدام دور موجود مسبقًا)
 # ----------------------------
 resource "aws_eks_node_group" "node-grp" {
   cluster_name    = aws_eks_cluster.eks.name
-  node_group_name = "project-node-group"
-  node_role_arn   = data.aws_iam_role.node_role.arn
+  node_group_name = var.node_group_name
+  node_role_arn   = "arn:aws:iam::851725605085:role/ExistingWorkerRole"  # استبدل بالـ ARN لدور Worker الموجود
   subnet_ids      = [data.aws_subnet.subnet-1.id, data.aws_subnet.subnet-2.id]
   capacity_type   = "ON_DEMAND"
   disk_size       = 20
-  instance_types  = ["t3.small"]
+  instance_types  = ["t2.large"]
 
   labels = {
     env = "dev"
@@ -99,9 +71,9 @@ resource "aws_eks_node_group" "node-grp" {
   }
 
   scaling_config {
-    desired_size = 1
-    max_size     = 2
-    min_size     = 1
+    desired_size = 3
+    max_size     = 10
+    min_size     = 2
   }
 
   update_config {
@@ -109,6 +81,22 @@ resource "aws_eks_node_group" "node-grp" {
   }
 }
 
+# ----------------------------
+# OIDC Provider for ServiceAccount IAM Roles
+# ----------------------------
+data "aws_eks_cluster" "eks_oidc" {
+  name = aws_eks_cluster.eks.name
+}
+
+data "tls_certificate" "oidc_thumbprint" {
+  url = data.aws_eks_cluster.eks_oidc.identity[0].oidc[0].issuer
+}
+
+resource "aws_iam_openid_connect_provider" "eks_oidc" {
+  client_id_list  = ["sts.amazonaws.com"]
+  thumbprint_list = [data.tls_certificate.oidc_thumbprint.certificates[0].sha1_fingerprint]
+  url             = data.aws_eks_cluster.eks_oidc.identity[0].oidc[0].issuer
+}
 # ----------------------------
 # ملاحظة: OIDC Provider محذوف مؤقتًا
 # ----------------------------
